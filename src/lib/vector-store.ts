@@ -1,4 +1,4 @@
-// import { env } from "./config";
+import { env } from "./config";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { PineconeStore } from "langchain/vectorstores/pinecone";
 import { PineconeClient } from "@pinecone-database/pinecone";
@@ -11,7 +11,7 @@ export async function embedAndStoreDocs(
   /*create and store the embeddings in the vectorStore*/
   try {
     const embeddings = new OpenAIEmbeddings();
-    const index = client.Index(process.env.PINECONE_INDEX_NAME || '');
+    const index = client.Index(env.PINECONE_INDEX_NAME);
 
     //embed the PDF documents
     await PineconeStore.fromDocuments(docs, embeddings, {
@@ -28,7 +28,7 @@ export async function embedAndStoreDocs(
 export async function getVectorStore(client: PineconeClient) {
   try {
     const embeddings = new OpenAIEmbeddings();
-    const index = client.Index(process.env.PINECONE_INDEX_NAME || '');
+    const index = client.Index(env.PINECONE_INDEX_NAME);
 
     const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
       pineconeIndex: index,
